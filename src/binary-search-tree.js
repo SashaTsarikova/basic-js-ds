@@ -16,31 +16,33 @@ const { Node } = require('../extensions/list-tree.js');
 // }
 
 module.exports = class BinarySearchTree{
-  
-
-
-  root() {
-    this.root = null;
+    
+    constructor() {
+    this.rootGlobal = null;
   }
-
-
+  
+    root() {
+   return this.rootGlobal;
+  }
+  
   add(data) {
-    const node = this.root()
-    if (node === null) {
-        this.root = new Node(data)
+    const newNode = new Node(data);
+    const node = this.rootGlobal;
+    if (!node) {
+        this.rootGlobal = newNode;
         return
     } else {
         const searchTree = function(node) {
             if (data < node.data) {
                 if (node.left === null) {
-                    node.left = new Node(data)
+                    node.left = newNode;
                     return
                 } else if (node.left !== null) {
                     return searchTree(node.left)
                 }
             } else if (data > node.data) {
                 if (node.right === null) {
-                    node.right = new Node(data)
+                    node.right = newNode;
                     return
                 } else if (node.right !== null) {
                     return searchTree(node.right)
@@ -51,10 +53,10 @@ module.exports = class BinarySearchTree{
         }
         return searchTree(node)
     }
-}
-
+  }
+  
   has(data) {
-    let current = this.root();
+    let current = this.rootGlobal;
     while (current) {
         if (data === current.data) {
             return true
@@ -62,10 +64,10 @@ module.exports = class BinarySearchTree{
         data < current.data ? current = current.left : current = current.right
     }
     return false
-}
-
+  }
+  
   find(data) {
-    let current = this.root()
+    let current = this.rootGlobal;
     while (current.data !== data) {
         if (data < current.data) {
             current = current.left
@@ -77,8 +79,8 @@ module.exports = class BinarySearchTree{
         }
     }
     return current
-}
-
+  }
+  
   remove(data) {
     const removeNode = function(node, data) {
         if (node === null) return null
@@ -105,26 +107,24 @@ module.exports = class BinarySearchTree{
             return node
         }
     }
-    a = this.root();
-    a = removeNode(this.root(), data)
-}
-
+    removeNode(this.rootGlobal, data)
+  }
+  
   min() {
-    let current = this.root()
+    let current = this.rootGlobal;
     while (current.left !== null) {
         current = current.left
     }
     return current.data
-}
-
+  }
+  
   max() {
-    let current = this.root()
+    let current = this.rootGlobal;
     while (current.right !== null) {
         current = current.right
     }
     return current.data
-}
-
-}
+  }
+  }
 
 
