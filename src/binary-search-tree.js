@@ -27,33 +27,31 @@ module.exports = class BinarySearchTree{
   
   add(data) {
     const newNode = new Node(data);
-    const node = this.rootGlobal;
-    if (!node) {
+    
+    if (!this.rootGlobal) {
         this.rootGlobal = newNode;
         return
-    } else {
-        const searchTree = function(node) {
-            if (data < node.data) {
-                if (node.left === null) {
-                    node.left = newNode;
-                    return
-                } else if (node.left !== null) {
-                    return searchTree(node.left)
-                }
-            } else if (data > node.data) {
-                if (node.right === null) {
-                    node.right = newNode;
-                    return
-                } else if (node.right !== null) {
-                    return searchTree(node.right)
-                }
-            } else {
-                return null
-            }
-        }
-        return searchTree(node)
     }
+      let node = this.rootGlobal;
+  
+    while (node){
+      if (newNode.data < node.data){
+        if (!node.left){
+            node.left = newNode;
+            return
+        } 
+            node=node.left;
+        } else {
+    if (!node.right){
+        node.right=newNode;
+        return
+    }
+    node = node.right
+    } 
   }
+  }
+
+  
   
   has(data) {
     let current = this.rootGlobal;
@@ -82,32 +80,67 @@ module.exports = class BinarySearchTree{
   }
   
   remove(data) {
-    const removeNode = function(node, data) {
-        if (node === null) return null
-        if (data === node.data) {
-            // потомки отсутствуют
-            if (node.left === null && node.right === null) return null
-            // отсутствует левый узел
-            if (node.left === null) return node.right
-            // отсутствует правый узел
-            if (node.right === null) return node.left
-            // имеется два узла
-            let tempNode = node.right
-            while (tempNode.left !== null) {
-                tempNode = tempNode.left
-            }
-            node.data = tempNode.data
-            node.right = removeNode(node.right, tempNode.data)
-            return node
-        } else if (data < node.data) {
-            node.left = removeNode(node.right, data)
-            return node
+
+    let current = this.rootGlobal;
+    let previousLeft;
+    let previousRight;
+    while (current.data !== data) {
+        if (data < current.data) {
+          previousLeft=current;
+            current = current.left
         } else {
-            node.right = removeNode(node.right, data)
-            return node
+          previousRight=current;
+            current = current.right
+        }
+        if (current === null) {
+            return null
         }
     }
-    removeNode(this.rootGlobal, data)
+  
+    if(!current.left && !current.right){
+          if (previousRight){
+            previousRight.right = null;
+            return
+          } else{
+            previousLeft.left = null;
+            return
+          }
+  
+    } else if(!current.left || !current.right){
+          if (current.left){
+              if (previousRight){
+              previousRight.right = current.left;
+              return
+            } else{
+              previousLeft.left = current.left;
+              return
+            }
+          } else {
+            if (current.right){
+              if (previousRight){
+              previousRight.right = current.right;
+              return
+            } else{
+              previousLeft.left = current.right;
+              return
+            }
+          }
+      } 
+    } else {
+  
+      let currentPeriodic = current;
+      let previosPeriodic = previousLeft || previousRight;
+      while (currentPeriodic.left !== null) {
+        previosPeriodic = currentPeriodic; 
+        currentPeriodic = currentPeriodic.left
+      }
+  
+     current.data = currentPeriodic.data;
+     previosPeriodic.left = null;
+    return
+  
+    }
+  
   }
   
   min() {
