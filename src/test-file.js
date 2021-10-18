@@ -127,6 +127,49 @@ find(data) {
 }
 
 remove(data) {
+if (this.rootGlobal.data==data && !this.rootGlobal.right && !this.rootGlobal.left){
+  this.rootGlobal=null;
+  return
+} else if (this.rootGlobal.data==data){
+    if (!this.rootGlobal.left){
+      this.rootGlobal = this.rootGlobal.right;
+      return
+    } else if (!this.rootGlobal.right){
+      this.rootGlobal = this.rootGlobal.left;
+      return
+    } else {
+      if (this.rootGlobal.left){
+          let currentPeriodic = this.rootGlobal.left;
+          let previosPeriodic;
+          while (currentPeriodic.right !== null) {
+            previosPeriodic = currentPeriodic; 
+            currentPeriodic = currentPeriodic.right
+          }
+
+        this.rootGlobal.data = currentPeriodic.data;
+        previosPeriodic.right = null;
+        return
+      } else {
+
+        if (this.rootGlobal.right){
+          let currentPeriodic = this.rootGlobal.right;
+          let previosPeriodic;
+         
+          while (currentPeriodic.left !== null) {
+            previosPeriodic = currentPeriodic; 
+            currentPeriodic = currentPeriodic.left
+          }
+
+        this.rootGlobal.data = currentPeriodic.data;
+        previosPeriodic.left = null;
+        return
+        }
+          
+      }
+      
+    }
+}
+
 
   let current = this.rootGlobal;
   let previousLeft;
@@ -187,7 +230,6 @@ remove(data) {
   return
 
   }
-
 }
 
 min() {
@@ -287,23 +329,52 @@ max() {
 
 
 
-const tree = new BinarySearchTree();
-tree.add(10);
+// const tree = new BinarySearchTree();
+// tree.add(10);
 
-tree.add(15);
-tree.add(7);
-tree.add(2);
-tree.add(9);
-tree.add(12);
-tree.add(11);
-tree.add(8);
-tree.remove(7);
-tree.remove(2);
-tree.remove(9);
-console.log(tree.min());
-console.log(tree.max());
+// tree.add(15);
+// tree.add(7);
+// tree.add(2);
+// tree.add(9);
+// tree.add(12);
+// tree.add(11);
+// tree.add(8);
+// tree.remove(7);
+// tree.remove(2);
+// tree.remove(9);
+// tree.remove(11);
+// tree.remove(12);
+// tree.remove(8);
+// tree.remove(10);
+// console.log(tree.min());
+// console.log(tree.max());
 // console.log(tree.has(9));
 // console.log(tree.min());
-console.log(tree);
+// console.log(tree);
 // console.log(tree.find(9));
 // console.log(tree.find(1));
+
+
+const tree = new BinarySearchTree();
+tree.add(9);
+tree.add(14);
+tree.add(2);
+tree.add(6);
+tree.add(128);
+tree.add(8);
+tree.add(31);
+tree.add(54);
+tree.add(1);
+tree.remove(14);
+tree.remove(8);
+tree.remove(9);
+console.log(tree.has(14)); // false);
+console.log(tree.has(8)); //, false);
+console.log(tree.has(9)); //false);
+console.log(tree.has(2)); //true);
+console.log(tree.has(6)); //, true);
+console.log(tree.has(128)); //, true);
+console.log(tree.has(31)); //, true);
+console.log(tree.has(54)); //, true);
+console.log(tree.has(1)); //, true);
+// console.log(tree)

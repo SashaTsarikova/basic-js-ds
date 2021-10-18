@@ -80,68 +80,110 @@ module.exports = class BinarySearchTree{
   }
   
   remove(data) {
-
-    let current = this.rootGlobal;
-    let previousLeft;
-    let previousRight;
-    while (current.data !== data) {
-        if (data < current.data) {
-          previousLeft=current;
-            current = current.left
+    if (this.rootGlobal.data==data && !this.rootGlobal.right && !this.rootGlobal.left){
+      this.rootGlobal=null;
+      return
+    } else if (this.rootGlobal.data==data){
+        if (!this.rootGlobal.left){
+          this.rootGlobal = this.rootGlobal.right;
+          return
+        } else if (!this.rootGlobal.right){
+          this.rootGlobal = this.rootGlobal.left;
+          return
         } else {
-          previousRight=current;
-            current = current.right
-        }
-        if (current === null) {
-            return null
-        }
-    }
-  
-    if(!current.left && !current.right){
-          if (previousRight){
-            previousRight.right = null;
+          if (this.rootGlobal.left){
+              let currentPeriodic = this.rootGlobal.left;
+              let previosPeriodic;
+              while (currentPeriodic.right !== null) {
+                previosPeriodic = currentPeriodic; 
+                currentPeriodic = currentPeriodic.right
+              }
+    
+            this.rootGlobal.data = currentPeriodic.data;
+            previosPeriodic.right = null;
             return
-          } else{
-            previousLeft.left = null;
-            return
-          }
-  
-    } else if(!current.left || !current.right){
-          if (current.left){
-              if (previousRight){
-              previousRight.right = current.left;
-              return
-            } else{
-              previousLeft.left = current.left;
-              return
-            }
           } else {
-            if (current.right){
-              if (previousRight){
-              previousRight.right = current.right;
+    
+            if (this.rootGlobal.right){
+              let currentPeriodic = this.rootGlobal.right;
+              let previosPeriodic;
+             
+              while (currentPeriodic.left !== null) {
+                previosPeriodic = currentPeriodic; 
+                currentPeriodic = currentPeriodic.left
+              }
+    
+            this.rootGlobal.data = currentPeriodic.data;
+            previosPeriodic.left = null;
+            return
+            }
+              
+          }
+          
+        }
+    }
+    
+    
+      let current = this.rootGlobal;
+      let previousLeft;
+      let previousRight;
+      while (current.data !== data) {
+          if (data < current.data) {
+            previousLeft=current;
+              current = current.left
+          } else {
+            previousRight=current;
+              current = current.right
+          }
+          if (current === null) {
+              return null
+          }
+      }
+    
+      if(!current.left && !current.right){
+            if (previousRight){
+              previousRight.right = null;
               return
             } else{
-              previousLeft.left = current.right;
+              previousLeft.left = null;
               return
             }
-          }
-      } 
-    } else {
-  
-      let currentPeriodic = current;
-      let previosPeriodic = previousLeft || previousRight;
-      while (currentPeriodic.left !== null) {
-        previosPeriodic = currentPeriodic; 
-        currentPeriodic = currentPeriodic.left
+    
+      } else if(!current.left || !current.right){
+            if (current.left){
+                if (previousRight){
+                previousRight.right = current.left;
+                return
+              } else{
+                previousLeft.left = current.left;
+                return
+              }
+            } else {
+              if (current.right){
+                if (previousRight){
+                previousRight.right = current.right;
+                return
+              } else{
+                previousLeft.left = current.right;
+                return
+              }
+            }
+        } 
+      } else {
+    
+        let currentPeriodic = current;
+        let previosPeriodic = previousLeft || previousRight;
+        while (currentPeriodic.left !== null) {
+          previosPeriodic = currentPeriodic; 
+          currentPeriodic = currentPeriodic.left
+        }
+    
+       current.data = currentPeriodic.data;
+       previosPeriodic.left = null;
+      return
+    
       }
-  
-     current.data = currentPeriodic.data;
-     previosPeriodic.left = null;
-    return
-  
     }
-  
-  }
   
   min() {
     let current = this.rootGlobal;
